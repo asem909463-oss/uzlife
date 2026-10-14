@@ -2,6 +2,7 @@
 import hashlib
 import hmac
 import os
+import re
 import time
 from collections import Counter
 from datetime import datetime, timedelta, timezone
@@ -44,6 +45,7 @@ class ConfigIn(BaseModel):
     features: dict[str, bool] | None = None
     website_url: str | None = None
     announcement: str | None = None
+    support_email: str | None = None
 
 
 class ServiceIn(BaseModel):
@@ -141,6 +143,10 @@ async def update_config(body: ConfigIn):
         if body.website_url and not body.website_url.startswith(("https://", "http://")):
             raise HTTPException(status_code=422, detail="invalid_url")
         updates["website_url"] = body.website_url
+    if body.support_email is not None:
+        if not re.match(r"^[^@\s]+@[^@\s]+\.[^@\s]+$", body.support_email.strip()):
+            raise HTTPException(status_code=422, detail="invalid_email")
+        updates["support_email"] = body.support_email.strip()
     if body.announcement is not None:
         updates["announcement"] = body.announcement[:300]
     if updates:
@@ -175,4 +181,26 @@ async def admin_add_service(body: ServiceIn):
 @router.delete("/services/{sid}", dependencies=guard)
 async def admin_delete_service(sid: str):
     await sb.rest("DELETE", "services", params={"id": f"eq.{sid}"})
+    return {"ok": True}
+
+
+@router.get("/reports", dependencies=guard)
+async def reports():
+    return await sb.rest("GET", "usage_events", params={"event": "eq.report", "select": "id,meta,created_at", "order": "created_at.desc", "limit": "100"})
+
+
+@router.delete("/reports/{rid}", dependencies=guard)
+async def dismiss_report(rid: int):
+    await sb.rest("DELETE", "usage_events", params={"id": f"eq.{rid}", "event": "eq.report"})
+    return {"ok": True}
+
+
+@router.post("/users/{uid}/ban", dependencies=guard)
+async def ban_user(uid: str):
+    """Ban an abusive user: block sign-in and remove all their listings."""
+    r = await sb.auth("PUT", f"admin/users/{uid}", admin=True, json={"ban_duration": "876000h"})
+    if r.status_code >= 300:
+        raise HTTPException(status_code=502, detail="auth_provider_error")
+    await sb.rest("DELETE", "market_listings", params={"user_id": f"eq.{uid}"})
+    sb.log_event("admin_ban")
     return {"ok": True}

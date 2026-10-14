@@ -18,6 +18,8 @@ export type AppConfig = {
   features: { flash_ai: boolean; explore: boolean; news: boolean; services: boolean; marketplace: boolean };
   website_url: string;
   announcement: string;
+  support_email: string;
+  company: string;
 };
 
 type Ctx = {

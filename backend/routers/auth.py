@@ -1,4 +1,5 @@
 """Accounts: email/password via Supabase Auth, profile, account deletion."""
+import os
 import re
 
 from fastapi import APIRouter, Depends, HTTPException
@@ -8,6 +9,17 @@ from core import sb
 from core.deps import current_user
 
 router = APIRouter(tags=["auth"])
+
+
+async def delete_user_media(uid: str):
+    """Best-effort removal of the user's Cloudinary folder."""
+    try:
+        await sb.http.delete(
+            f"https://api.cloudinary.com/v1_1/{os.environ['CLOUDINARY_CLOUD_NAME']}/resources/image/upload",
+            params={"prefix": f"uzlife/{uid}"},
+            auth=(os.environ["CLOUDINARY_API_KEY"], os.environ["CLOUDINARY_API_SECRET"]))
+    except Exception:
+        pass
 EMAIL_RE = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
 
 
@@ -110,6 +122,9 @@ async def update_profile(body: ProfileIn, user: dict = Depends(current_user)):
 
 @router.delete("/account")
 async def delete_account(user: dict = Depends(current_user)):
+    # Rows in user tables cascade-delete with the auth user; usage events and media are removed explicitly.
+    await sb.rest("DELETE", "usage_events", params={"user_id": f"eq.{user['id']}"})
+    await delete_user_media(user["id"])
     r = await sb.auth("DELETE", f"admin/users/{user['id']}", admin=True)
     if r.status_code >= 300:
         raise HTTPException(status_code=502, detail="auth_provider_error")

@@ -10,6 +10,22 @@ from core import sb
 from core.deps import current_user, require_feature
 
 router = APIRouter(tags=["market"])
+
+# Basic automatic filter for objectionable marketplace content (App Store guideline 1.2).
+BANNED = [
+    "fuck", "shit", "bitch", "porn", "sex service", "escort", "cocaine", "heroin", "weed", "marijuana", "gun for sale",
+    "хуй", "хуё", "пизд", "ебат", "ебан", "бляд", "сука", "порно", "интим", "эскорт", "наркот", "кокаин", "героин", "мефедрон", "закладк", "оружие",
+    "jalab", "qotoq", "giyohvand", "fohisha",
+]
+
+
+def is_objectionable(*texts: str | None) -> bool:
+    hay = " ".join(t.lower() for t in texts if t)
+    return any((f" {w}" in f" {hay}") for w in BANNED)
+
+
+class ReportIn(BaseModel):
+    reason: str = Field(min_length=2, max_length=300)
 CLD_NAME = os.environ["CLOUDINARY_CLOUD_NAME"]
 CLD_KEY = os.environ["CLOUDINARY_API_KEY"]
 CLD_SECRET = os.environ["CLOUDINARY_API_SECRET"]
@@ -62,6 +78,8 @@ async def listing(lid: str):
 
 @router.post("/market/listings", dependencies=[Depends(require_feature("marketplace"))])
 async def create_listing(body: ListingIn, user: dict = Depends(current_user)):
+    if is_objectionable(body.title, body.description, body.contact):
+        raise HTTPException(status_code=422, detail="objectionable_content")
     rows = await sb.rest("POST", "market_listings", json={**body.model_dump(), "user_id": user["id"]}, prefer="return=representation")
     sb.log_event("listing_created", user["id"])
     return rows[0]
@@ -70,6 +88,16 @@ async def create_listing(body: ListingIn, user: dict = Depends(current_user)):
 @router.delete("/market/listings/{lid}")
 async def delete_listing(lid: str, user: dict = Depends(current_user)):
     await sb.rest("DELETE", "market_listings", params={"id": f"eq.{lid}", "user_id": f"eq.{user['id']}"})
+    return {"ok": True}
+
+
+@router.post("/market/listings/{lid}/report")
+async def report_listing(lid: str, body: ReportIn, user: dict = Depends(current_user)):
+    rows = await sb.rest("GET", "market_listings", params={"id": f"eq.{lid}", "select": "id,title,user_id"})
+    if not rows:
+        raise HTTPException(status_code=404, detail="not_found")
+    await sb.rest("POST", "usage_events", json={"event": "report", "user_id": user["id"], "meta": {
+        "listing_id": lid, "title": rows[0]["title"], "owner_id": rows[0]["user_id"], "reason": body.reason}})
     return {"ok": True}
 
 

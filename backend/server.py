@@ -12,7 +12,7 @@ from fastapi import APIRouter, FastAPI  # noqa: E402
 from starlette.middleware.cors import CORSMiddleware  # noqa: E402
 
 from core.deps import get_config  # noqa: E402
-from routers import admin, ai, auth, life, market, news, places  # noqa: E402
+from routers import admin, ai, auth, legal, life, market, news, places  # noqa: E402
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 logging.getLogger("httpx").setLevel(logging.WARNING)  # request URLs may contain API keys
@@ -37,10 +37,11 @@ async def root():
 @api.get("/config")
 async def public_config():
     cfg = await get_config()
-    return {"features": cfg["features"], "website_url": cfg.get("website_url") or "", "announcement": cfg.get("announcement") or ""}
+    return {"features": cfg["features"], "website_url": cfg.get("website_url") or "", "announcement": cfg.get("announcement") or "",
+            "support_email": cfg.get("support_email") or legal.DEFAULT_SUPPORT, "company": legal.COMPANY}
 
 
-for r in (auth.router, news.router, places.router, life.router, market.router, ai.router, admin.router):
+for r in (auth.router, legal.router, news.router, places.router, life.router, market.router, ai.router, admin.router):
     api.include_router(r)
 app.include_router(api)
 
