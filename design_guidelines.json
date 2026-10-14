@@ -1,0 +1,179 @@
+{
+  "app_name": "Uzlife",
+  "personality": "6 Glass / Luxe DARK",
+  "personality_one_liner": "A cinematic, deeply atmospheric, and premium super app where rich dark navy surfaces meet warm glowing amber accents and frosted glass.",
+  "color": {
+    "surface": "#090C10",
+    "onSurface": "#F8F9FA",
+    "surfaceSecondary": "#151922",
+    "onSurfaceSecondary": "#E1E4E8",
+    "surfaceTertiary": "#212631",
+    "onSurfaceTertiary": "#D1D5DB",
+    "surfaceInverse": "#F3F4F6",
+    "onSurfaceInverse": "#090C10",
+    "brand": "#D4AF37",
+    "brandPrimary": "#E6B553",
+    "onBrandPrimary": "#000000",
+    "brandSecondary": "#B88E3E",
+    "onBrandSecondary": "#FFFFFF",
+    "brandTertiary": "rgba(230, 181, 83, 0.15)",
+    "onBrandTertiary": "#E6B553",
+    "success": "#2E7D32",
+    "onSuccess": "#FFFFFF",
+    "warning": "#F57F17",
+    "onWarning": "#000000",
+    "error": "#D32F2F",
+    "onError": "#FFFFFF",
+    "info": "#1976D2",
+    "onInfo": "#FFFFFF",
+    "border": "#2A303C",
+    "borderStrong": "#3A4354",
+    "divider": "#1F2532",
+    "muted": "#8B95A5"
+  },
+  "typography": {
+    "displayFontFamily": "Playfair Display",
+    "textFontFamily": "Manrope",
+    "scale": {
+      "sm": 12,
+      "base": 14,
+      "lg": 16,
+      "xl": 20,
+      "2xl": 24
+    }
+  },
+  "spacing": {
+    "rule": "Generous spacing. Utilize negative space to make the dark navy surfaces feel vast and premium. Never cramp elements.",
+    "xs": 4,
+    "sm": 8,
+    "md": 12,
+    "lg": 16,
+    "xl": 24,
+    "2xl": 32,
+    "3xl": 48
+  },
+  "radius_tokens": {
+    "sm": 6,
+    "md": 12,
+    "lg": 20,
+    "pill": 999
+  },
+  "shadow_tier": 0,
+  "navigation": "bottom_tabs",
+  "icon_set": "Phosphor",
+  "glassmorphism": {
+    "enabled": true,
+    "do's": [
+      "Use glass on sticky headers, bottom tab bars, bottom-sheet handles, floating action buttons (FABs), and featured hero cards.",
+      "Pair the blur with a translucent tinted base (≥75% of surface) underneath to guarantee readability in dark mode.",
+      "Ensure text on top of glass uses onSurface and has maximum contrast."
+    ],
+    "dont's": [
+      "Never apply glass to standard form fields, body text regions, or basic list rows.",
+      "Never rely on blur alone without the underlying tint layer."
+    ]
+  },
+  "platform_libraries": {
+    "glass": {
+      "ios": "expo-glass-effect",
+      "android": "expo-blur",
+      "low_end_android_fallback": "solid surfaceSecondary"
+    },
+    "image": "expo-image",
+    "blur": "expo-blur",
+    "bottom_sheet": "@gorhom/bottom-sheet",
+    "animation": "react-native-reanimated",
+    "gesture": "react-native-gesture-handler"
+  },
+  "screens": [
+    {
+      "name": "Home",
+      "purpose": "The cinematic central hub offering personalized content and immediate access to Flash AI.",
+      "states": {
+        "loading": "Centered sleek amber spinner against deep navy background.",
+        "empty": "Abstract dark imagery with a gentle prompt to start exploring.",
+        "error": "Soft error message with a prominent 'Retry' button in amber."
+      },
+      "layout": "Top greeting in serif typography + circular avatar. A large hero card featuring a stunning Tashkent night photo with a vertical gradient scrim, overlaid with personalized AI suggestions. A horizontal scroll of glass-layered quick shortcuts. A vertical list of 'For You' recommendations on elevated surfaceSecondary cards."
+    },
+    {
+      "name": "Flash AI",
+      "purpose": "A premium, minimal conversational interface where the AI acts as a sophisticated executive assistant.",
+      "states": {
+        "loading": "Subtle pulsing loading pill.",
+        "empty": "A clean dark canvas with a single warm 'How can I assist you today?' greeting.",
+        "error": "Minimal inline error text with retry icon."
+      },
+      "layout": "Clean iOS-native top header. Near-black chat canvas. User bubbles are right-aligned with subtle surfaceSecondary fill; AI replies are left-aligned on the main surface. Action confirmation cards are rendered as rich glass components with a brandPrimary CTA. Bottom neumorphic input bar anchored to the keyboard."
+    },
+    {
+      "name": "Explore",
+      "purpose": "A visually driven directory of places prioritizing large imagery and typography.",
+      "states": {
+        "loading": "Skeleton UI matching the large image cards.",
+        "empty": "Premium dark abstract state indicating no places found.",
+        "error": "Simple retry mechanism."
+      },
+      "layout": "Sticky search bar and horizontal filter chips over scrolling content using expo-blur. Single-column, edge-to-edge image cards. Each card has a full-bleed photo, a 3-stop vertical gradient scrim (transparent to 80% surfaceInverse), with the title and rating sitting in the bottom 30%."
+    },
+    {
+      "name": "News",
+      "purpose": "An elegant, editorial-style reading experience for global and local Uzbekistan news.",
+      "states": {
+        "loading": "Editorial-style skeleton blocks.",
+        "empty": "No news available, stylized empty state illustration.",
+        "error": "Readable message with a retry button."
+      },
+      "layout": "Glassy sticky header with horizontal category chips. The top story is a large hero image card with serif headlines. Subsequent stories are horizontal list items with a right-aligned square thumbnail, title, and a small glass badge for 'AI Summary'."
+    },
+    {
+      "name": "My Life",
+      "purpose": "A calm, structured utility space for plans, saved places, and reminders.",
+      "states": {
+        "loading": "Centered loading spinner.",
+        "empty": "Premium dark abstract illustration + soft prompt to create the first plan/reminder.",
+        "error": "Error message with retry action."
+      },
+      "layout": "Top glassy segmented control (Plans | Reminders | Saved). Vertical list of items on sleek surfaceSecondary cards. Each item features a prominent left-aligned icon in a brandTertiary container and an action chevron."
+    },
+    {
+      "name": "Auth",
+      "purpose": "A high-end cinematic entry point for user login and guest access.",
+      "states": {
+        "loading": "Button shows loading state during auth.",
+        "empty": "N/A",
+        "error": "Inline red validation text below inputs."
+      },
+      "layout": "Full-bleed dark Tashkent hero background with heavy gradient overlay. Bottom-anchored glass sheet for auth. Email/Password inputs with labels above, a primary CTA in brandPrimary, and a subtle secondary text link for Guest access."
+    }
+  ],
+  "images": {
+    "hero_background": {
+      "url": "https://images.unsplash.com/photo-1712176287466-d21e9f2cc991?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA2MjJ8MHwxfHNlYXJjaHwyfHxUYXNoa2VudCUyMG1vZGVybiUyMGFyY2hpdGVjdHVyZSUyMG5pZ2h0fGVufDB8fHx8MTc5MTk3NDY4Mnww&ixlib=rb-4.1.0&q=85",
+      "alt": "Tashkent modern architecture at night, illuminated hotel"
+    },
+    "explore_city": {
+      "url": "https://images.unsplash.com/photo-1646916777029-973d54bcbccc?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA2MjJ8MHwxfHNlYXJjaHwzfHxUYXNoa2VudCUyMG1vZGVybiUyMGFyY2hpdGVjdHVyZSUyMG5pZ2h0fGVufDB8fHx8MTc5MTk3NDY4Mnww&ixlib=rb-4.1.0&q=85",
+      "alt": "City street at night with lit up building"
+    },
+    "empty_state_abstract": {
+      "url": "https://images.unsplash.com/photo-1710438399422-2fca27686bcd?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA4MTR8MHwxfHNlYXJjaHwxfHxwcmVtaXVtJTIwZGFyayUyMGVtcHR5JTIwc3RhdGUlMjBhYnN0cmFjdHxlbnwwfHx8fDE3OTE5NzU1MTB8MA&ixlib=rb-4.1.0&q=85",
+      "alt": "Premium dark abstract wavy lines for empty state"
+    },
+    "news_abstract": {
+      "url": "https://images.unsplash.com/photo-1556139930-c23fa4a4f934?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA3MDB8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjBuZXdzJTIwbGlmZXN0eWxlJTIwYWJzdHJhY3R8ZW58MHx8fHwxNzkxOTc0NjgzfDA&ixlib=rb-4.1.0&q=85",
+      "alt": "Luxury dark brown and blue abstract painting for news placeholders"
+    }
+  },
+  "instructions_to_main_agent": [
+    "Load custom fonts `Playfair Display` (serif, display) and `Manrope` (sans-serif, text) from TTF files using `expo-font`. Ensure these fonts support Cyrillic characters as Russian is the default language.",
+    "Do NOT use `@expo-google-fonts` packages. You must provide instructions or a script to download the TTF files (e.g., via a bash script pulling from Google Fonts zip) or mock them if actual files cannot be downloaded, but they must be loaded via local file references.",
+    "Implement a bottom tab navigator with 4 main tabs (Home, Explore, News, Life).",
+    "Flash AI must be a full-screen route (modal or stack screen), accessible via a prominent FAB or a central action button.",
+    "Strictly enforce the gradient-to-dark scrim pattern on all images that have text overlaid. The gradient must be vertical, transparent to ≥70% surfaceInverse.",
+    "Glassmorphism must be used on the bottom tab bar, sticky headers, bottom-sheet handles, and featured hero cards. In dark mode, ensure the translucent tinted base under the blur is at least 75% opacity to guarantee text readability.",
+    "Create a hidden Admin dashboard accessible via tapping a version number or specific hidden sequence in the Profile section.",
+    "Ensure all copy and placeholders reflect the premium, executive assistant tone.",
+    "Use Phosphor icons consistently. Stick to one weight per screen (except active/inactive states in the tab bar)."
+  ]
+}
