@@ -1,10 +1,13 @@
+
 workflows:
   ios-release:
     name: Uzlife iOS
     instance_type: mac_mini_m2
     max_build_duration: 60
+
     integrations:
-      app_store_connect: codemagic
+      app_store_connect: uzlife codemagic
+
     environment:
       ios_signing:
         distribution_type: app_store
@@ -12,22 +15,36 @@ workflows:
       node: 20
       xcode: latest
       cocoapods: default
+
     scripts:
       - name: Build iOS app
         script: |
           APP_DIR=$(dirname "$(find "$CM_BUILD_DIR" -name app.json -not -path '*/node_modules/*' | head -1)")
           cd "$APP_DIR"
-          if [ -f yarn.lock ]; then yarn install; else npm install --legacy-peer-deps; fi
+
+          if [ -f yarn.lock ]; then
+            corepack yarn install
+          else
+            npm install --legacy-peer-deps
+          fi
+
           npx expo prebuild --platform ios --clean
+
           /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $BUILD_NUMBER" ios/Uzlife/Info.plist
+
           cd ios
           pod install
+
           xcode-project use-profiles
           xcode-project build-ipa --workspace "$APP_DIR/ios/Uzlife.xcworkspace" --scheme Uzlife
+
           mkdir -p "$CM_BUILD_DIR/build"
           cp -R build/ios "$CM_BUILD_DIR/build/"
+
     artifacts:
       - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+
     publishing:
       app_store_connect:
         auth: integration
