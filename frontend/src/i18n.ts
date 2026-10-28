@@ -67,6 +67,7 @@ const ru = {
   email_exists: "Этот email уже зарегистрирован",
   invalid_email: "Введите корректный email",
   passwordShort: "Пароль — минимум 6 символов",
+  guestSectionTitle: "Попробуйте приложение без аккаунта",
   guestNote: "В гостевом режиме доступны поиск, новости и Flash AI",
 
   greetMorning: "Доброе утро",
@@ -340,6 +341,7 @@ const en: Dict = {
   email_exists: "This email is already registered",
   invalid_email: "Enter a valid email",
   passwordShort: "Password must be at least 6 characters",
+  guestSectionTitle: "Explore without an account",
   guestNote: "Guests can search, read news and use Flash AI",
   greetMorning: "Good morning",
   greetDay: "Good afternoon",
@@ -601,6 +603,7 @@ const uz: Dict = {
   email_exists: "Bu email allaqachon ro'yxatdan o'tgan",
   invalid_email: "To'g'ri email kiriting",
   passwordShort: "Parol kamida 6 ta belgi",
+  guestSectionTitle: "Hisob ochmasdan foydalaning",
   guestNote: "Mehmon rejimida qidiruv, yangiliklar va Flash AI mavjud",
   greetMorning: "Xayrli tong",
   greetDay: "Xayrli kun",

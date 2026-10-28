@@ -70,12 +70,13 @@ export default function AuthScreen() {
             <Pressy testID="auth-toggle-mode" onPress={() => { setMode(mode === "login" ? "signup" : "login"); setErr(""); }} haptic={false} style={{ alignItems: "center", paddingVertical: spacing.xs }}>
               <Txt variant="label" color={colors.onSurfaceSecondary}>{mode === "login" ? t("noAccount") : t("haveAccount")}</Txt>
             </Pressy>
+            <View style={{ gap: spacing.sm, borderTopWidth: 1, borderTopColor: colors.divider, paddingTop: spacing.lg }}>
+              <Txt variant="label" color={colors.onSurfaceSecondary}>{t("guestSectionTitle")}</Txt>
+              <Txt variant="caption" color={colors.muted}>{t("guestNote")}</Txt>
+              <Button testID="auth-guest-button" kind="secondary" label={t("continueGuest")} onPress={continueAsGuest} />
+            </View>
           </Glass>
         </Animated.View>
-        <Pressy testID="auth-guest-button" onPress={continueAsGuest} style={{ alignItems: "center", paddingVertical: spacing.lg, gap: 4 }}>
-          <Txt variant="bodyStrong" color={colors.brandPrimary}>{t("continueGuest")}</Txt>
-          <Txt variant="caption" color={colors.muted}>{t("guestNote")}</Txt>
-        </Pressy>
       </KeyboardAwareScrollView>
     </View>
   );
